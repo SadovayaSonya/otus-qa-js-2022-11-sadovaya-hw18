@@ -2,12 +2,6 @@ name: UI tests VK
 
 on:
   workflow_dispatch:
-  push:
-    branches: [ "main" ]
-  pull_request:
-    branches: [ "main" ]
-  schedule:
-    - cron: "0 2 * * *"
 
 jobs:
   build:
