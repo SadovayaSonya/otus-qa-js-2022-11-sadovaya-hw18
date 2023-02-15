@@ -2,7 +2,7 @@ import {defineConfig} from '@playwright/test';
 
 const config = defineConfig({
     use: {
-        headless: false,
+        headless: true,
         viewport: {width: 1920, height: 1080},
         ignoreHTTPSErrors: true,
         baseURL: 'https://vk.com/',
