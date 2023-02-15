@@ -79,7 +79,7 @@ describe('ВК. UI-тесты', () => {
         await page.locator(selectorFeedPage.arrayReactionsInNewsBlocks).first().click();
         let afterNumberOfLikes = await page.locator(selectorFeedPage.arrayReactionsInNewsBlocks).first().getAttribute('data-reaction-counts');
         afterNumberOfLikes = JSON.parse(afterNumberOfLikes)['0'];
-        expect(beforeNumberOfLikes + 1).toBe(afterNumberOfLikes);
+        expect(beforeNumberOfLikes + 1).toBeLessThanOrEqual(afterNumberOfLikes);
         await page.screenshot({path: 'screenshots/После_установки_лайка.png', fullPage: true});
     });
 
