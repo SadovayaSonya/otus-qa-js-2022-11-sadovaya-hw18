@@ -1,0 +1,6 @@
+{
+  "extension": ["js", "cjs"],
+  "spec": ["specs/**/*.spec.js"],
+  "package": "./package.json",
+  "timeout": "30000"
+}
