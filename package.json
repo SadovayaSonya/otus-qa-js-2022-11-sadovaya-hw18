@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "type": "module",
   "scripts": {
-    "test": "mocha"
+    "test": "mocha -r dotenv/config"
   },
   "author": "SadovayaSonya",
   "license": "ISC",
@@ -15,6 +15,7 @@
   },
   "dependencies": {
     "@playwright/test": "^1.30.0",
+    "dotenv": "^16.0.3",
     "playwright": "^1.30.0"
   }
 }

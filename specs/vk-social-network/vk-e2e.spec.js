@@ -3,12 +3,6 @@ import {expect} from '@playwright/test';
 
 let page, browser;
 
-const credential = {
-    phone: `${process.env.VK_PHONE}`,
-    password: `${process.env.VK_PASSWORD}`,
-    id: `${process.env.VK_ID}`
-};
-
 const selectorAuthPage = {
     inputPhoneOrNumber: "//input[@name='login']",
     buttonLogin: "//button[@type='submit']",
@@ -65,11 +59,11 @@ describe('ВК. UI-тесты', () => {
     it('Авторизация в ВК через номер телефона и пароль', async function () {
         await page.goto('/');
         await page.locator(selectorAuthPage.buttonLogin).waitFor();
-        await page.locator(selectorAuthPage.inputPhoneOrNumber).fill(credential.phone);
+        await page.locator(selectorAuthPage.inputPhoneOrNumber).fill(process.env.VK_PHONE);
         await page.locator(selectorAuthPage.buttonLogin).click();
         await page.locator(selectorAuthPage.buttonLoginWithPassword).click();
         await page.locator(selectorAuthPage.buttonLogin).waitFor();
-        await page.locator(selectorAuthPage.inputPassword).fill(credential.password);
+        await page.locator(selectorAuthPage.inputPassword).fill(process.env.VK_PASSWORD);
         await page.locator(selectorAuthPage.buttonLogin).click();
         await page.waitForLoadState('networkidle');
         await expect(page.locator(selectorItemMainMenu.buttonMyPage)).toBeVisible();
@@ -90,7 +84,7 @@ describe('ВК. UI-тесты', () => {
     });
 
     it('Публикация приватной записи с темой IT на странице', async function () {
-        await page.goto(`/${credential.id}`);
+        await page.goto(`/${process.env.VK_ID}`);
         await page.locator(selectorProfilePage.nameUser).waitFor();
         let beforeNumberOfPosts = await page.locator(selectorProfilePage.counterPosts).getAttribute('value');
         beforeNumberOfPosts = Number(beforeNumberOfPosts);
