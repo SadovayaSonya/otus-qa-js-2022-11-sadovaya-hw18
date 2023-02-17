@@ -1,4 +1,6 @@
 import {defineConfig} from '@playwright/test';
+import dotenv from 'dotenv';
+dotenv.config();
 
 const config = defineConfig({
     use: {

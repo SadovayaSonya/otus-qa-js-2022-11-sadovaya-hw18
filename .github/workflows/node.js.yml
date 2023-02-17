@@ -2,39 +2,22 @@ name: UI tests VK
 
 on:
   workflow_dispatch:
-  push:
-    branches: [ "main" ]
-  pull_request:
-    branches: [ "main" ]
-  schedule:
-    - cron: "0 2 * * *"
 
 jobs:
-  build:
+  test:
+    timeout-minutes: 60
     runs-on: ubuntu-latest
-    permissions:
-      contents: read
-      deployments: write
-    strategy:
-      matrix:
-        node-version: [ 18.x ]
-
     steps:
       - uses: actions/checkout@v3
-      - name: Use Node.js ${{ matrix.node-version }}
-        uses: actions/setup-node@v3
+      - uses: actions/setup-node@v3
         with:
-          node-version: ${{ matrix.node-version }}
-          cache: 'npm'
-          cache-dependency-path: ./package-lock.json
-
+          node-version: 18
       # Установка зависимостей из package.json
       - name: Install deps
         run: npm i
-
       # Запуск тестов
       - name: Run tests
-        run: npm run test
+        run: npx playwright test
         continue-on-error: true
         env:
           VK_PHONE: ${{ secrets.VK_PHONE }}

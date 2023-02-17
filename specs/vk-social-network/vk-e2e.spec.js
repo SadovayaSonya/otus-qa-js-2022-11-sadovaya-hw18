@@ -1,5 +1,5 @@
 import launchBrowser from "../helpers/launchBrowser.js";
-import {expect} from '@playwright/test';
+import {test, expect} from '@playwright/test';
 
 let page, browser;
 
@@ -7,7 +7,8 @@ const selectorAuthPage = {
     inputPhoneOrNumber: "//input[@name='login']",
     buttonLogin: "//button[@type='submit']",
     buttonLoginWithPassword: "//span[contains(text(), 'Войти при помощи пароля')]/..",
-    inputPassword: "//input[@name='password']"
+    inputPassword: "//input[@name='password']",
+    toggleRussianLang: "//div[@id='index_footer_wrap']//a[text()='Русский']"
 };
 
 const selectorFeedPage = {
@@ -49,16 +50,18 @@ const selectorItemMainMenu = {
     buttonMyPage: "//li[@id='l_pr']//a"
 };
 
-describe('ВК. UI-тесты', () => {
+test.describe('ВК. UI-тесты', () => {
 
-    before(async function () {
+    test.beforeAll(async function () {
         [browser, page] = await launchBrowser()
     });
-    after(async () => await browser.close());
+    test.afterAll(async () => await browser.close());
 
-    it('Авторизация в ВК через номер телефона и пароль', async function () {
+    test('Авторизация в ВК через номер телефона и пароль', async function () {
         await page.goto('/');
-        await page.locator(selectorAuthPage.buttonLogin).waitFor();
+        await page.locator(selectorAuthPage.toggleRussianLang).waitFor();
+        await page.locator(selectorAuthPage.toggleRussianLang).click();
+        await page.waitForTimeout(2000);
         await page.locator(selectorAuthPage.inputPhoneOrNumber).fill(process.env.VK_PHONE);
         await page.locator(selectorAuthPage.buttonLogin).click();
         await page.locator(selectorAuthPage.buttonLoginWithPassword).click();
@@ -70,7 +73,7 @@ describe('ВК. UI-тесты', () => {
         await page.screenshot({path: 'screenshots/Пользователь_авторизован.png', fullPage: true});
     });
 
-    it('Установка лайка посту', async function () {
+    test('Установка лайка посту', async function () {
         await page.goto('/feed');
         await page.locator(selectorFeedPage.blockPostOfNews).waitFor();
         let beforeNumberOfLikes = await page.locator(selectorFeedPage.arrayReactionsInNewsBlocks).first().getAttribute('data-reaction-counts');
@@ -83,7 +86,7 @@ describe('ВК. UI-тесты', () => {
         await page.screenshot({path: 'screenshots/После_установки_лайка.png', fullPage: true});
     });
 
-    it('Публикация приватной записи с темой IT на странице', async function () {
+    test('Публикация приватной записи с темой IT на странице', async function () {
         await page.goto(`/${process.env.VK_ID}`);
         await page.locator(selectorProfilePage.nameUser).waitFor();
         let beforeNumberOfPosts = await page.locator(selectorProfilePage.counterPosts).getAttribute('value');
@@ -103,7 +106,7 @@ describe('ВК. UI-тесты', () => {
         await page.screenshot({path: `screenshots/Запись_опубликована.png`, fullPage: true});
     });
 
-    it('Подписка на официальное сообщество Хабр', async function () {
+    test('Подписка на официальное сообщество Хабр', async function () {
         await page.goto('/groups');
         await page.screenshot({path: `screenshots/Пользователь_не_состоит_в_сообществах.png`, fullPage: true});
         await page.locator(selectorGroupsPage.inputSearchGroups).fill('Хабр');
@@ -116,7 +119,7 @@ describe('ВК. UI-тесты', () => {
         await page.screenshot({path: `screenshots/Пользователь_состоит_в_сообществе.png`, fullPage: true});
     });
 
-    it('Создание нового чата', async function () {
+    test('Создание нового чата', async function () {
         await page.goto('/im');
         await page.locator(selectorMessagesPage.buttonCreateNewChat).click();
         await page.locator(selectorMessagesPage.inputNameChat).fill('Тестовый_чат');
